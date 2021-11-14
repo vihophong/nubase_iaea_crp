@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>getnubase &mdash; Example Python With Documentation alpha documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Example Python With Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../getnubase_def.html">Nubase tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example_this_docs.html">Example this docs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Example Python With Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>getnubase</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for getnubase</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This contains functions to manipulate reaclib v2 data file&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">elements</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;h&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;he&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;li&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;be&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;f&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s2">&quot;ne&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;na&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s2">&quot;mg&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;al&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> 
+<span class="s2">&quot;si&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;cl&quot;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s2">&quot;ar&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s2">&quot;ca&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;sc&quot;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span> <span class="s2">&quot;ti&quot;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s2">&quot;cr&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s2">&quot;mn&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;fe&quot;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span>
+ <span class="s2">&quot;co&quot;</span><span class="p">:</span> <span class="mi">27</span><span class="p">,</span> <span class="s2">&quot;ni&quot;</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="s2">&quot;cu&quot;</span><span class="p">:</span> <span class="mi">29</span><span class="p">,</span> <span class="s2">&quot;zn&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;ga&quot;</span><span class="p">:</span> <span class="mi">31</span><span class="p">,</span> <span class="s2">&quot;ge&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;as&quot;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span> <span class="s2">&quot;se&quot;</span><span class="p">:</span> <span class="mi">34</span><span class="p">,</span> <span class="s2">&quot;br&quot;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span> <span class="s2">&quot;kr&quot;</span><span class="p">:</span> <span class="mi">36</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span> <span class="s2">&quot;sr&quot;</span><span class="p">:</span> <span class="mi">38</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mi">39</span><span class="p">,</span>
+  <span class="s2">&quot;zr&quot;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">&quot;nb&quot;</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span> <span class="s2">&quot;mo&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span> <span class="s2">&quot;tc&quot;</span><span class="p">:</span> <span class="mi">43</span><span class="p">,</span> <span class="s2">&quot;ru&quot;</span><span class="p">:</span> <span class="mi">44</span><span class="p">,</span> <span class="s2">&quot;rh&quot;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span> <span class="s2">&quot;pd&quot;</span><span class="p">:</span> <span class="mi">46</span><span class="p">,</span> <span class="s2">&quot;ag&quot;</span><span class="p">:</span> <span class="mi">47</span><span class="p">,</span> <span class="s2">&quot;cd&quot;</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="mi">49</span><span class="p">,</span> <span class="s2">&quot;sn&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;sb&quot;</span><span class="p">:</span> <span class="mi">51</span><span class="p">,</span> <span class="s2">&quot;te&quot;</span><span class="p">:</span> <span class="mi">52</span><span class="p">,</span>
+   <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="mi">53</span><span class="p">,</span> <span class="s2">&quot;xe&quot;</span><span class="p">:</span> <span class="mi">54</span><span class="p">,</span> <span class="s2">&quot;cs&quot;</span><span class="p">:</span> <span class="mi">55</span><span class="p">,</span> <span class="s2">&quot;ba&quot;</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span> <span class="s2">&quot;la&quot;</span><span class="p">:</span> <span class="mi">57</span><span class="p">,</span> <span class="s2">&quot;ce&quot;</span><span class="p">:</span> <span class="mi">58</span><span class="p">,</span> <span class="s2">&quot;pr&quot;</span><span class="p">:</span> <span class="mi">59</span><span class="p">,</span> <span class="s2">&quot;nd&quot;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;pm&quot;</span><span class="p">:</span> <span class="mi">61</span><span class="p">,</span> <span class="s2">&quot;sm&quot;</span><span class="p">:</span> <span class="mi">62</span><span class="p">,</span> <span class="s2">&quot;eu&quot;</span><span class="p">:</span> <span class="mi">63</span><span class="p">,</span> <span class="s2">&quot;gd&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s2">&quot;tb&quot;</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span>
+    <span class="s2">&quot;dy&quot;</span><span class="p">:</span> <span class="mi">66</span><span class="p">,</span> <span class="s2">&quot;ho&quot;</span><span class="p">:</span> <span class="mi">67</span><span class="p">,</span> <span class="s2">&quot;er&quot;</span><span class="p">:</span> <span class="mi">68</span><span class="p">,</span> <span class="s2">&quot;tm&quot;</span><span class="p">:</span> <span class="mi">69</span><span class="p">,</span> <span class="s2">&quot;yb&quot;</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span> <span class="s2">&quot;lu&quot;</span><span class="p">:</span> <span class="mi">71</span><span class="p">,</span> <span class="s2">&quot;hf&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span> <span class="s2">&quot;ta&quot;</span><span class="p">:</span> <span class="mi">73</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="mi">74</span><span class="p">,</span> <span class="s2">&quot;re&quot;</span><span class="p">:</span> <span class="mi">75</span><span class="p">,</span> <span class="s2">&quot;os&quot;</span><span class="p">:</span> <span class="mi">76</span><span class="p">,</span> <span class="s2">&quot;ir&quot;</span><span class="p">:</span> <span class="mi">77</span><span class="p">,</span> <span class="s2">&quot;pt&quot;</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span>
+     <span class="s2">&quot;au&quot;</span><span class="p">:</span> <span class="mi">79</span><span class="p">,</span> <span class="s2">&quot;hg&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="s2">&quot;tl&quot;</span><span class="p">:</span> <span class="mi">81</span><span class="p">,</span> <span class="s2">&quot;pb&quot;</span><span class="p">:</span> <span class="mi">82</span><span class="p">,</span> <span class="s2">&quot;bi&quot;</span><span class="p">:</span> <span class="mi">83</span><span class="p">,</span> <span class="s2">&quot;po&quot;</span><span class="p">:</span> <span class="mi">84</span><span class="p">,</span> <span class="s2">&quot;at&quot;</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span> <span class="s2">&quot;rn&quot;</span><span class="p">:</span> <span class="mi">86</span><span class="p">,</span> <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="mi">87</span><span class="p">,</span> <span class="s2">&quot;ra&quot;</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">&quot;ac&quot;</span><span class="p">:</span> <span class="mi">89</span><span class="p">,</span> <span class="s2">&quot;th&quot;</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">&quot;pa&quot;</span><span class="p">:</span> <span class="mi">91</span><span class="p">,</span>
+      <span class="s2">&quot;u&quot;</span><span class="p">:</span> <span class="mi">92</span><span class="p">,</span> <span class="s2">&quot;np&quot;</span><span class="p">:</span> <span class="mi">93</span><span class="p">,</span> <span class="s2">&quot;pu&quot;</span><span class="p">:</span> <span class="mi">94</span><span class="p">,</span> <span class="s2">&quot;am&quot;</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span> <span class="s2">&quot;cm&quot;</span><span class="p">:</span> <span class="mi">96</span><span class="p">,</span> <span class="s2">&quot;bk&quot;</span><span class="p">:</span> <span class="mi">97</span><span class="p">,</span> <span class="s2">&quot;cf&quot;</span><span class="p">:</span> <span class="mi">98</span><span class="p">,</span> <span class="s2">&quot;es&quot;</span><span class="p">:</span> <span class="mi">99</span><span class="p">,</span> <span class="s2">&quot;fm&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;md&quot;</span><span class="p">:</span> <span class="mi">101</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">:</span> <span class="mi">102</span><span class="p">,</span> <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="mi">103</span><span class="p">,</span> <span class="s2">&quot;rf&quot;</span><span class="p">:</span> <span class="mi">104</span><span class="p">,</span>
+       <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="mi">105</span><span class="p">,</span> <span class="s2">&quot;sg&quot;</span><span class="p">:</span> <span class="mi">106</span><span class="p">,</span> <span class="s2">&quot;bh&quot;</span><span class="p">:</span> <span class="mi">107</span><span class="p">,</span> <span class="s2">&quot;hs&quot;</span><span class="p">:</span> <span class="mi">108</span><span class="p">,</span> <span class="s2">&quot;mt&quot;</span><span class="p">:</span> <span class="mi">109</span><span class="p">,</span> <span class="s2">&quot;ds&quot;</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span> <span class="s2">&quot;rg&quot;</span><span class="p">:</span> <span class="mi">111</span><span class="p">,</span> <span class="s2">&quot;cn&quot;</span><span class="p">:</span> <span class="mi">112</span><span class="p">,</span> <span class="s2">&quot;nh&quot;</span><span class="p">:</span> <span class="mi">113</span><span class="p">,</span> <span class="s2">&quot;fl&quot;</span><span class="p">:</span> <span class="mi">114</span><span class="p">,</span> <span class="s2">&quot;mc&quot;</span><span class="p">:</span> <span class="mi">115</span><span class="p">,</span> <span class="s2">&quot;lv&quot;</span><span class="p">:</span> <span class="mi">116</span><span class="p">,</span> <span class="s2">&quot;ts&quot;</span><span class="p">:</span> <span class="mi">117</span><span class="p">,</span> <span class="s2">&quot;og&quot;</span><span class="p">:</span> <span class="mi">118</span><span class="p">,</span>
+       <span class="s2">&quot;al-&quot;</span><span class="p">:</span><span class="mi">119</span><span class="p">,</span> <span class="s2">&quot;al*&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">}</span>
+
+<div class="viewcode-block" id="getnamebyz"><a class="viewcode-back" href="../getnubase_def.html#getnubase.getnamebyz">[docs]</a><span class="k">def</span> <span class="nf">getnamebyz</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Get element name by atomic number Z</span>
+<span class="sd">	</span>
+<span class="sd">	Parameters:</span>
+<span class="sd">	   z ( int ): Atomic number Z</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">keys</span><span class="o">=</span><span class="n">elements</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+	<span class="n">values</span><span class="o">=</span><span class="n">elements</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">keys</span><span class="p">[</span><span class="n">values</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">z</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="getZ"><a class="viewcode-back" href="../getnubase_def.html#getnubase.getZ">[docs]</a><span class="k">def</span> <span class="nf">getZ</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Get atomic number Z by element name</span>
+<span class="sd">	</span>
+<span class="sd">	Parameters:</span>
+<span class="sd">	   input ( str ): Element name</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nb">input</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">8888</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">sep</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(\d+)&#39;</span><span class="p">,</span><span class="nb">input</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;n&quot;</span><span class="p">:</span>
+				<span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="p">(</span><span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;p&quot;</span> <span class="ow">or</span> <span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;d&quot;</span> <span class="ow">or</span> <span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;t&quot;</span><span class="p">):</span>
+				<span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>			
+			<span class="k">else</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Something wrong! &quot;</span><span class="p">,</span><span class="nb">input</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span></div>
+
+<div class="viewcode-block" id="getA"><a class="viewcode-back" href="../getnubase_def.html#getnubase.getA">[docs]</a><span class="k">def</span> <span class="nf">getA</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Get mass number A by element name</span>
+<span class="sd">	</span>
+<span class="sd">	Parameters:</span>
+<span class="sd">	   input ( str ): Element name</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nb">input</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">9999</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">sep</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(\d+)&#39;</span><span class="p">,</span><span class="nb">input</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;n&quot;</span><span class="p">:</span>
+				<span class="k">return</span> <span class="mi">1</span>
+			<span class="k">elif</span> <span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;p&quot;</span><span class="p">:</span>
+				<span class="k">return</span> <span class="mi">1</span>
+			<span class="k">elif</span> <span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;d&quot;</span><span class="p">:</span>
+				<span class="k">return</span> <span class="mi">2</span>
+			<span class="k">elif</span> <span class="n">sep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;t&quot;</span><span class="p">:</span>
+				<span class="k">return</span> <span class="mi">3</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Something wrong! &quot;</span><span class="p">,</span><span class="nb">input</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">sep</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Phong.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
