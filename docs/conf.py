@@ -53,11 +53,11 @@ templates_path = ['_templates']
 master_doc = 'index'
 
 # General information about the project.
-project = u'Example Python With Documentation'
+project = u'NUBASE IAEA CRP'
 copyright = u'2021, Phong'
 author = u'Phong'
 
-github_doc_root = 'https://github.com/vihophong/example-python-with-docs/tree/master/docs/'
+github_doc_root = 'https://github.com/vihophong/nubase_iaea_crp/tree/master/docs/'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
