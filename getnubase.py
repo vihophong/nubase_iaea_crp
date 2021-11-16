@@ -71,3 +71,33 @@ def getA(input):
 				print("Something wrong! ",input)
 		else:
 			return int(sep[1])
+
+def load_txt(infile):
+	"""
+	Load nubase file and write it to an array of dictionaries
+	
+	Parameters:
+	   input ( str ): File path-name
+	"""
+	n_lines = sum(1 for line in open(infile))
+	file1 = open(infile);
+	count = 0
+	reaclib=[]
+	while True:
+		count+=1
+		line1 = file1.readline()
+		if (not line1):
+			break
+		if (line1[0]=="#"):
+			continue
+		line1 = line1[0:len(line1)-1]
+		if len(line1)<220:
+			for i in range(220-len(line1)):
+				line1 = line1+" "
+		line1 = bytes(line1,encoding='utf8')
+
+		(A,empty1,Zi,empty2,Ael,s_type,empty3,Mass,dMass,Exc,dExc,Orig,Isom_Unc,Isom_Inv,T12,T12_unit,empty4,dT12,Jpi,Ensdf_year,Discov_year,BR) = struct.unpack("3s1s4s3s5s1s1s13s11s12s11s2s1s1s9s2s1s7s14s2s4s90s22x",line1)
+		(A,empty1,Zi,empty2,Ael,s_type,empty3,Mass,dMass,Exc,dExc,Orig,Isom_Unc,Isom_Inv,T12,T12_unit,empty4,dT12,Jpi,Ensdf_year,Discov_year,BR) = map(lambda x: x.decode('utf-8').strip(),(A,empty1,Zi,empty2,Ael,s_type,empty3,Mass,dMass,Exc,dExc,Orig,Isom_Unc,Isom_Inv,T12,T12_unit,empty4,dT12,Jpi,Ensdf_year,Discov_year,BR))
+		print(A,Ael,T12,dT12,BR)
+
+load_txt('nubase_3.mas20.txt')
