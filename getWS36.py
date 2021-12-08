@@ -83,74 +83,74 @@ def getA(input):
 			return int(sep[1])
 
 def load_txt(infile):
-	"""
-	Load frdm table and write it to an array of dictionaries
-	
-	Parameters:
-	   infile ( str ): File path-name
-	"""
-	n_lines = sum(1 for line in open(infile))
-	file1 = open(infile);
-	count = 0
-	datafrdm=[]
-	while True:
-		count+=1
-		line1 = file1.readline()
-		if (not line1):
-			break
-		if (line1[0]=="#"):
-			continue
-		line1 = line1[0:len(line1)-1]
-		line1 = bytes(line1,encoding='utf8')
-		(Z,N,A,e2,e3,e4,e6,b2,b3,b4,b6,Esp,Emic,Ebind,Mth,Mexp,sexp,EFLmic,MFLth) = struct.unpack("5s5s5s10s10s10s10s10s10s10s10s10s10s10s10s10s10s10s10s",line1)
-		(Z,N,A,e2,e3,e4,e6,b2,b3,b4,b6,Esp,Emic,Ebind,Mth,Mexp,sexp,EFLmic,MFLth) = map(lambda x: x.decode('utf-8').strip(),(Z,N,A,e2,e3,e4,e6,b2,b3,b4,b6,Esp,Emic,Ebind,Mth,Mexp,sexp,EFLmic,MFLth))
-		(Z,N,A) = map(lambda x: int(x),(Z,N,A))
-		(e2,e3,e4,e6,b2,b3,b4,b6,Esp,Emic,Ebind,Mth,Mexp,sexp,EFLmic,MFLth) = map(lambda x: float(x) if len(x)>0 == 0 else -9999,(e2,e3,e4,e6,b2,b3,b4,b6,Esp,Emic,Ebind,Mth,Mexp,sexp,EFLmic,MFLth))
-		datafrdm.append({"ZA": Z*1000+N+Z,"N": N,"Z": Z,"A": N+Z,"EL": getnamebyz(Z),"Ebind":Ebind,"Mth":Mth})
-	return datafrdm
+    """
+    Load frdm table and write it to an array of dictionaries
+
+    Parameters:
+    infile ( str ): File path-name
+    """
+    n_lines = sum(1 for line in open(infile))
+    file1 = open(infile);
+    count = 0
+    dataws36=[]
+    while True:
+        count+=1
+        line1 = file1.readline()
+        if (not line1):
+            break
+        if (line1[0]=="#"):
+            continue
+        line1 = line1[0:len(line1)-1]
+        A,Z,Beta2,Beta4,Beta6,Esh,Dres,Eexp,Eth,Mexp,Mth = [float(e) for e in line1.split()] 
+        A = int(A)
+        Z = int(Z)
+        N = A - Z
+        #print(A,Z,Mth)
+        dataws36.append({"ZA": Z*1000+N+Z,"N": N,"Z": Z,"A": A,"EL": getnamebyz(Z),"Ebind":-Eth,"Mth":Mth})
+    return dataws36
 
 def getdriplines():
-	datafrdm = load_txt('ADNDT-FRDM2012-TABLE.dat')
-	data_bound = []
-	data_bound_Qbn = []
-	for i in range(len(datafrdm)):
-		S1n_entry = next((item for item in datafrdm if (item["Z"] == datafrdm[i]["Z"] and item["N"] == datafrdm[i]["N"]-1)), None)
-		S2n_entry = next((item for item in datafrdm if (item["Z"] == datafrdm[i]["Z"] and item["N"] == datafrdm[i]["N"]-2)), None)
-		Qbn_entry = next((item for item in datafrdm if (item["Z"] == datafrdm[i]["Z"]+1 and item["N"] == datafrdm[i]["N"]-2)), None)
-		Qb_entry = next((item for item in datafrdm if (item["Z"] == datafrdm[i]["Z"]+1 and item["N"] == datafrdm[i]["N"]-1)), None)
-		S1n = -9999
-		S1n_mass = -9999
-		S2n = -9999
-		Qbn = -9999
-		Qb = -9999
-		if (S1n_entry!=None):
-			S1n = datafrdm[i]["Ebind"]-S1n_entry["Ebind"]
-			S1n_mass = -datafrdm[i]["Mth"] + S1n_entry["Mth"] + 8.07131806			
-		if (S2n_entry!=None):
-			S2n = datafrdm[i]["Ebind"]-S2n_entry["Ebind"]
-		if (Qb_entry!=None):
-			Qb = datafrdm[i]["Mth"] - Qb_entry["Mth"]
-		if (Qbn_entry!=None):
-			Qbn = datafrdm[i]["Mth"] - Qbn_entry["Mth"] - 8.07131806
-		S1p_entry = next((item for item in datafrdm if (item["Z"] == datafrdm[i]["Z"]-1 and item["N"] == datafrdm[i]["N"])), None)
-		S2p_entry = next((item for item in datafrdm if (item["Z"] == datafrdm[i]["Z"]-2 and item["N"] == datafrdm[i]["N"])), None)
-		S1p = -9999
-		S2p = -9999
-		if (S1p_entry!=None):
-			S1p = datafrdm[i]["Ebind"]-S1p_entry["Ebind"]
-		if (S2p_entry!=None):
-			S2p = datafrdm[i]["Ebind"]-S2p_entry["Ebind"]
-		if (S1n>0 and S2n>0 and S1p>0 and S2p>0):
-			#print(datafrdm[i]["N"],getnamebyz(datafrdm[i]["Z"]),(S1n-S1n_mass)/S1n*100)			
-			data_bound.append({"ZA": datafrdm[i]["ZA"],"N": datafrdm[i]["N"],"Z": datafrdm[i]["Z"],"A": datafrdm[i]["A"],"EL": datafrdm[i]["EL"],"Ebind":datafrdm[i]["Ebind"],"S1n":S1n,"S2n":S2n,"S1p":S1p,"S2p":S2p})
-			if (Qbn>0 and Qb>0):
-				data_bound_Qbn.append({"ZA": datafrdm[i]["ZA"],"N": datafrdm[i]["N"],"Z": datafrdm[i]["Z"],"A": datafrdm[i]["A"],"EL": datafrdm[i]["EL"],"Ebind":datafrdm[i]["Ebind"],"S1n":S1n,"S2n":S2n,"S1p":S1p,"S2p":S2p,"Qb":Qb,"Qbn":Qbn})
+    dataws36 = load_txt('WS3.6.txt')
+    print(len(dataws36))
+    data_bound = []
+    data_bound_Qbn = []
+    for i in range(len(dataws36)):
+        S1n_entry = next((item for item in dataws36 if (item["Z"] == dataws36[i]["Z"] and item["N"] == dataws36[i]["N"]-1)), None)
+        S2n_entry = next((item for item in dataws36 if (item["Z"] == dataws36[i]["Z"] and item["N"] == dataws36[i]["N"]-2)), None)
+        Qbn_entry = next((item for item in dataws36 if (item["Z"] == dataws36[i]["Z"]+1 and item["N"] == dataws36[i]["N"]-2)), None)
+        Qb_entry = next((item for item in dataws36 if (item["Z"] == dataws36[i]["Z"]+1 and item["N"] == dataws36[i]["N"]-1)), None)
+        S1n = -9999
+        S1n_mass = -9999
+        S2n = -9999
+        Qbn = -9999
+        Qb = -9999
+        if (S1n_entry!=None):
+            S1n = dataws36[i]["Ebind"]-S1n_entry["Ebind"]
+            S1n_mass = -dataws36[i]["Mth"] + S1n_entry["Mth"] + 8.07131806			
+        if (S2n_entry!=None):
+            S2n = dataws36[i]["Ebind"]-S2n_entry["Ebind"]
+        if (Qb_entry!=None):
+            Qb = dataws36[i]["Mth"] - Qb_entry["Mth"]
+        if (Qbn_entry!=None):
+            Qbn = dataws36[i]["Mth"] - Qbn_entry["Mth"] - 8.07131806
+        S1p_entry = next((item for item in dataws36 if (item["Z"] == dataws36[i]["Z"]-1 and item["N"] == dataws36[i]["N"])), None)
+        S2p_entry = next((item for item in dataws36 if (item["Z"] == dataws36[i]["Z"]-2 and item["N"] == dataws36[i]["N"])), None)
+        S1p = -9999
+        S2p = -9999
+        if (S1p_entry!=None):
+            S1p = dataws36[i]["Ebind"]-S1p_entry["Ebind"]
+        if (S2p_entry!=None):
+            S2p = dataws36[i]["Ebind"]-S2p_entry["Ebind"]            
+        if (S1n>0 and S2n>0 and S1p>0 and S2p>0):
+            #print(dataws36[i]["N"],getnamebyz(dataws36[i]["Z"]),(S1n-S1n_mass)/S1n*100)			
+            data_bound.append({"ZA": dataws36[i]["ZA"],"N": dataws36[i]["N"],"Z": dataws36[i]["Z"],"A": dataws36[i]["A"],"EL": dataws36[i]["EL"],"Ebind":dataws36[i]["Ebind"],"S1n":S1n,"S2n":S2n,"S1p":S1p,"S2p":S2p})
+            if (Qbn>0 and Qb>0):
+                data_bound_Qbn.append({"ZA": dataws36[i]["ZA"],"N": dataws36[i]["N"],"Z": dataws36[i]["Z"],"A": dataws36[i]["A"],"EL": dataws36[i]["EL"],"Ebind":dataws36[i]["Ebind"],"S1n":S1n,"S2n":S2n,"S1p":S1p,"S2p":S2p,"Qb":Qb,"Qbn":Qbn})
+    return data_bound,data_bound_Qbn
 
-
-	return data_bound,data_bound_Qbn
 data_bound,data_bound_Qbn = getdriplines()
-np.save("data_bound.npy",data_bound)
-np.save("data_bound_Qbn.npy",data_bound_Qbn)
+np.save("data_bound_WS36.npy",data_bound)
+np.save("data_bound_Qbn_WS36.npy",data_bound_Qbn)
 
 def drawbox(N,Z,fcolor='None',ecolor='gray', falpha = 1):
 	"""
