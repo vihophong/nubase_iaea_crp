@@ -190,7 +190,7 @@ def load_txt(infile):
 	np.save("nubase_bminus.npy",nubase_bminus)
 	np.save("nubase_bplus.npy",nubase_bplus)
 	np.save("nubase_alpha.npy",nubase_alpha)
-		
+
 load_txt('nubase_3.mas20.txt')
 
 def drawbox(N,Z,fcolor='None',ecolor='gray', falpha = 1,linewidth=1):
